@@ -13,12 +13,12 @@ import kotlinx.android.synthetic.main.color_list_row.view.*
  * Populate recycler with rows showing a color preview and its hex code.
  */
 class ColorListRecyclerAdapter(private var mColors: List<Color>,
-                               private val mItemListener: (Int) -> Unit)
+                               private val mItemListener: (Long) -> Unit)
     : RecyclerView.Adapter<ColorListRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.color_list_row))
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(mColors[position], position, mItemListener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(mColors[position], mItemListener)
 
     override fun getItemCount() = mColors.size
 
@@ -28,11 +28,11 @@ class ColorListRecyclerAdapter(private var mColors: List<Color>,
     }
 
     class ViewHolder(private val rowView: View) : RecyclerView.ViewHolder(rowView) {
-        fun bind(color: Color, index: Int, onClick: (Int) -> Unit) = with(rowView) {
+        fun bind(color: Color, onClick: (Long) -> Unit) = with(rowView) {
             color_preview.setBackgroundColor(color.getColorValue())
             color_code.text = color.getHexCode()
 
-            rowView.setOnClickListener { onClick(index) }
+            rowView.setOnClickListener { onClick(color.id) }
         }
     }
 }

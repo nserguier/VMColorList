@@ -8,6 +8,9 @@ import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
+ * The ViewModel factory to help create any ViewModel object
+ * while allowing for dagger dependency injection in them.
+ *
  * Created by nicklos on 11/20/17.
  */
 @Singleton

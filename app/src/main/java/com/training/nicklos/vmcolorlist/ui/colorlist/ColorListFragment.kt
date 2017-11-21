@@ -3,6 +3,7 @@ package com.training.nicklos.vmcolorlist.ui.colorlist
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,8 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.training.nicklos.vmcolorlist.ColorListApplication
-import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.R
+import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
 import kotlinx.android.synthetic.main.fragment_color_list.*
 import javax.inject.Inject
@@ -27,25 +29,15 @@ class ColorListFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // Get the viewmodel and observe on changes
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorListViewModel::class.java)
-
-        val colorsObserver = Observer<List<Color>> { t -> updateColorList(t) }
-        viewModel.colors?.observe(this, colorsObserver)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_color_list, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity.application as ColorListApplication).appComponent.inject(this)
-        mAdapter = ColorListRecyclerAdapter(emptyList()) { index -> showColorEditUi(index) }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_color_list, container, false)
+        mAdapter = ColorListRecyclerAdapter(emptyList()) { colorId -> showColorEditActivity(colorId) }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -60,11 +52,24 @@ class ColorListFragment : Fragment() {
         add_color_fab.setOnClickListener { viewModel.addColor() }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Get the viewmodel and observe on changes
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorListViewModel::class.java)
+
+        val colorsObserver = Observer<List<Color>> { t -> updateColorList(t) }
+        viewModel.colors?.observe(this, colorsObserver)
+    }
+
+
     private fun updateColorList(colors: List<Color>?) {
         colors?.let { mAdapter.replaceData(it) }
     }
 
-    private fun showColorEditUi(colorIndex: Int) {
-
+    private fun showColorEditActivity(colorId: Long) {
+        val intent = Intent(context, ColorEditActivity::class.java)
+        intent.putExtra(ColorEditActivity.EXTRA_COLOR_ID, colorId)
+        startActivity(intent)
     }
 }

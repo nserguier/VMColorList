@@ -37,4 +37,11 @@ class ColorEditViewModel @Inject constructor(private var colorRepo: ColorReposit
         if (Objects.equals(colorId, id)) return
         else colorId.value = id
     }
+
+    fun onColorChanged(newRed: Int, newGreen: Int, newBlue: Int) {
+        //TODO: Maybe use the color in color field instead and update the fields?
+        val newColor = Color(newRed, newGreen, newBlue)
+        newColor.id = colorId.value ?: 0
+        colorRepo.updateColor(newColor)
+    }
 }

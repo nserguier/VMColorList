@@ -49,7 +49,9 @@ class ColorListFragment : Fragment() {
         color_list_recycler.adapter = mAdapter
 
         // init the fab
-        add_color_fab.setOnClickListener { viewModel.addColor() }
+        add_color_fab.setOnClickListener {
+            viewModel.addColor()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -64,7 +66,10 @@ class ColorListFragment : Fragment() {
 
 
     private fun updateColorList(colors: List<Color>?) {
-        colors?.let { mAdapter.replaceData(it) }
+        colors?.let { mAdapter.replaceData(it)
+            //scroll to the bottom
+            //color_list_recycler.smoothScrollToPosition(mAdapter.itemCount - 1)
+        }
     }
 
     private fun showColorEditActivity(colorId: Long) {

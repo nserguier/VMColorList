@@ -14,13 +14,10 @@
             android:id="@+id/color_preview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintDimensionRatio="w,1:2"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@color/colorAccent" />
 
@@ -28,31 +25,30 @@
             android:id="@+id/red_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:max="255"
             android:progressTint="@color/red_RGB"
             android:thumbTint="@color/red_RGB"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/green_seekbar"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/color_preview"
+            app:layout_constraintStart_toEndOf="@+id/color_preview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread"
             tools:progress="25" />
 
         <SeekBar
             android:id="@+id/green_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:max="255"
             android:progressTint="@color/green_RGB"
             android:thumbTint="@color/green_RGB"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/blue_seekbar"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/color_preview"
             app:layout_constraintTop_toBottomOf="@+id/red_seekbar"
             tools:progress="180" />
 
@@ -60,15 +56,14 @@
             android:id="@+id/blue_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:max="255"
             android:progressTint="@color/blue_RGB"
             android:thumbTint="@color/blue_RGB"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/edit_button"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/color_preview"
             app:layout_constraintTop_toBottomOf="@+id/green_seekbar"
             tools:progress="75" />
 
@@ -80,9 +75,7 @@
             android:layout_margin="16dp"
             android:text="@string/action_edit"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/blue_seekbar"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

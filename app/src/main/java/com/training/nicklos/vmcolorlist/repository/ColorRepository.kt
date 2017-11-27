@@ -27,4 +27,8 @@ class ColorRepository(var colorDao: ColorDao) {
     fun getColorById(id: Long): LiveData<Color> {
         return colorDao.findColorById(id)
     }
+
+    fun updateColor(color: Color) {
+        colorDao.updateColor(color)
+    }
 }

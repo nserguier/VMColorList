@@ -2,46 +2,55 @@ package com.training.nicklos.vmcolorlist.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import android.os.AsyncTask
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.repository.ColorRepository
-import com.training.nicklos.vmcolorlist.util.AbsentLiveData
-import java.util.*
 import javax.inject.Inject
 
 /**
  * ViewModel for the [ColorEditFragment]
  * Holds the data and logic to feed to the fragment.
  */
-class ColorEditViewModel @Inject constructor(private var colorRepo: ColorRepository) : ViewModel() {
+class ColorEditViewModel @Inject constructor(private val colorRepo: ColorRepository) : ViewModel() {
 
-    private val colorId = MutableLiveData<Long>()
-    var color: LiveData<Color>? = null
+    private var colorId: Long? = null
+    private var color: MutableLiveData<Color>? = null
 
-    init {
+    /** Use this from the fragment to set the ID */
+    fun setColorId(id: Long) {
+        colorId = id
+    }
+
+    /**
+     * Return color LiveData for the Fragment to observe
+     * not MutableLiveData to prevent fragment from changing data
+     */
+    fun getColor(): LiveData<Color> {
         if (color == null) {
-            //Get the color from the ID
-            color = Transformations.switchMap(colorId) { id ->
-                return@switchMap if (id == null) {
-                    AbsentLiveData.create()
-                } else {
-                    colorRepo.getColorById(id)
-                }
+            //Initialize the live data and start the get color process
+            color = MutableLiveData()
+            loadColor()
+        }
+        return color!!
+    }
+
+    /** Attempt to load the color from the [colorId] in a different thread */
+    private fun loadColor() {
+        AsyncTask.execute {
+            colorId?.let {
+                //Use postValue since we are on a background thread
+                color?.postValue(colorRepo.getColorById(it))
             }
         }
     }
 
-    //Use this from the fragment
-    fun setColorId(id: Long) {
-        if (Objects.equals(colorId, id)) return
-        else colorId.value = id
+    /** When the color components have been changed by the user, update color */
+    fun onColorChanged(newRed: Int, newGreen: Int, newBlue: Int) {
+        color?.value = color?.value?.update(newRed, newGreen, newBlue)
     }
 
-    fun onColorChanged(newRed: Int, newGreen: Int, newBlue: Int) {
-        //TODO: Maybe use the color in color field instead and update the fields?
-        val newColor = Color(newRed, newGreen, newBlue)
-        newColor.id = colorId.value ?: 0
-        colorRepo.updateColor(newColor)
+    fun saveColor() {
+        color?.value?.let { colorRepo.updateColor(it) }
     }
 }

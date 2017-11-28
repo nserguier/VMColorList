@@ -23,8 +23,9 @@ import javax.inject.Inject
 class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     private lateinit var viewModel: ColorEditViewModel
-
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var colorObserver: Observer<Color>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +40,11 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Set listener on the sliders
-        red_seekbar.setOnSeekBarChangeListener(this)
-        green_seekbar.setOnSeekBarChangeListener(this)
-        blue_seekbar.setOnSeekBarChangeListener(this)
-
-        edit_button.setOnClickListener { activity.onBackPressed() }
+        //Set listener for edit button
+        edit_button.setOnClickListener {
+            viewModel.saveColor()
+            activity.onBackPressed()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -54,16 +54,51 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorEditViewModel::class.java)
         viewModel.setColorId(arguments.getLong(ColorEditActivity.EXTRA_COLOR_ID, 0))
 
-        //When the color changes, update the UI
-        val colorObserver = Observer<Color> { color ->
+        //When the color changes for the first time, update the UI then change observer
+        colorObserver = Observer { color ->
             color?.let {
-                color_preview.setBackgroundColor(it.getColorValue())
-                red_seekbar.progress = it.red
-                green_seekbar.progress = it.green
-                blue_seekbar.progress = it.blue
+                updateColor(it)
+                updateSeekers(it)
+                reObserveColor()
             }
         }
-        viewModel.color?.observe(this, colorObserver)
+        viewModel.getColor().observe(this, colorObserver)
+    }
+
+    private fun updateColor(color: Color) {
+        color_preview.setBackgroundColor(color.getColorValue())
+    }
+
+    private fun updateSeekers(color: Color) {
+        red_seekbar.progress = color.red
+        green_seekbar.progress = color.green
+        blue_seekbar.progress = color.blue
+    }
+
+    /**
+     * Re-observe on color changes to only update the color preview, not the seekers
+     * Also set the seeker listeners
+     * This is to avoid onProgressChanged being called on the initial color update, causing loops
+     */
+    private fun reObserveColor() {
+        //Remove previous observer
+        viewModel.getColor().removeObserver(colorObserver)
+
+        setSeekerListeners()
+        val newColorObserver = Observer<Color> { color ->
+            color?.let { updateColor(it) }
+        }
+        viewModel.getColor().observe(this, newColorObserver)
+    }
+
+    private fun setSeekerListeners() {
+        red_seekbar.setOnSeekBarChangeListener(this)
+        green_seekbar.setOnSeekBarChangeListener(this)
+        blue_seekbar.setOnSeekBarChangeListener(this)
+    }
+
+    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+        viewModel.onColorChanged(red_seekbar.progress, green_seekbar.progress, blue_seekbar.progress)
     }
 
     override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -72,9 +107,5 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(p0: SeekBar?) {
         //No implementation needed
-    }
-
-    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-        viewModel.onColorChanged(red_seekbar.progress, green_seekbar.progress, blue_seekbar.progress)
     }
 }

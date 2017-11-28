@@ -15,7 +15,7 @@ interface ColorDao {
     fun getAllColors(): LiveData<List<Color>>
 
     @Query("SELECT * FROM color WHERE id = :id")
-    fun findColorById(id: Long): LiveData<Color>
+    fun findColorById(id: Long): Color
 
     @Insert(onConflict = REPLACE)
     fun insertColor(color: Color)

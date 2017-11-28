@@ -11,7 +11,7 @@ import android.arch.persistence.room.PrimaryKey
  * @param blue from 0 to 255
  */
 @Entity
-class Color(var red: Int, var green: Int, var blue: Int) {
+data class Color(var red: Int, var green: Int, var blue: Int) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -34,5 +34,12 @@ class Color(var red: Int, var green: Int, var blue: Int) {
         val greenHex = Integer.toHexString(green)
         val blueHex = Integer.toHexString(blue)
         return "#$redHex$greenHex$blueHex"
+    }
+
+    fun update(newRed: Int, newGreen: Int, newBlue: Int): Color {
+        red = checkColorParam(newRed)
+        green = checkColorParam(newGreen)
+        blue = checkColorParam(newBlue)
+        return this
     }
 }

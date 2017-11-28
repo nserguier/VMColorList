@@ -1,11 +1,13 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
 import kotlinx.android.synthetic.main.color_list_row.view.*
 
 /**
@@ -13,7 +15,7 @@ import kotlinx.android.synthetic.main.color_list_row.view.*
  * Populate recycler with rows showing a color preview and its hex code.
  */
 class ColorListRecyclerAdapter(private var mColors: List<Color>,
-                               private val mItemListener: (Long) -> Unit)
+                               private val mItemListener: (Long, View) -> Unit)
     : RecyclerView.Adapter<ColorListRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.color_list_row))
@@ -28,11 +30,12 @@ class ColorListRecyclerAdapter(private var mColors: List<Color>,
     }
 
     class ViewHolder(private val rowView: View) : RecyclerView.ViewHolder(rowView) {
-        fun bind(color: Color, onClick: (Long) -> Unit) = with(rowView) {
+        fun bind(color: Color, onClick: (Long, View) -> Unit) = with(rowView) {
             color_preview.setBackgroundColor(color.getColorValue())
             color_code.text = color.getHexCode()
 
-            rowView.setOnClickListener { onClick(color.id) }
+            ViewCompat.setTransitionName(color_preview, "$COLOR_TRANSITION_NAME${color.id}")
+            rowView.setOnClickListener { onClick(color.id, color_preview) }
         }
     }
 }

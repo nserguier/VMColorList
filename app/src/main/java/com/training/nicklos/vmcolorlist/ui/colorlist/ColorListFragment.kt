@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -14,6 +15,9 @@ import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
+import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
+import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
+import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
 import kotlinx.android.synthetic.main.fragment_color_list.*
 import javax.inject.Inject
@@ -37,7 +41,7 @@ class ColorListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity.application as ColorListApplication).appComponent.inject(this)
-        mAdapter = ColorListRecyclerAdapter(emptyList()) { colorId -> showColorEditActivity(colorId) }
+        mAdapter = ColorListRecyclerAdapter(emptyList()) { colorId, colorView -> showColorEditActivity(colorId, colorView) }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -66,15 +70,17 @@ class ColorListFragment : Fragment() {
 
 
     private fun updateColorList(colors: List<Color>?) {
-        colors?.let { mAdapter.replaceData(it)
+        colors?.let {
+            mAdapter.replaceData(it)
             //scroll to the bottom
             //color_list_recycler.smoothScrollToPosition(mAdapter.itemCount - 1)
         }
     }
 
-    private fun showColorEditActivity(colorId: Long) {
+    private fun showColorEditActivity(colorId: Long, colorView: View) {
         val intent = Intent(context, ColorEditActivity::class.java)
-        intent.putExtra(ColorEditActivity.EXTRA_COLOR_ID, colorId)
-        startActivity(intent)
+        intent.putExtra(EXTRA_COLOR_ID, colorId)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, colorView, "$COLOR_TRANSITION_NAME$colorId")
+        startActivity(intent, options.toBundle())
     }
 }

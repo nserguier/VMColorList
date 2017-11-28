@@ -12,6 +12,8 @@ import android.widget.SeekBar
 import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
+import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.viewmodel.ColorEditViewModel
 import kotlinx.android.synthetic.main.fragment_color_edit.*
 import javax.inject.Inject
@@ -50,9 +52,13 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //Set color preview transition name
+        val colorId = arguments.getLong(EXTRA_COLOR_ID, 0)
+        color_preview.transitionName = "$COLOR_TRANSITION_NAME$colorId"
+
         //Get the viewmodel and set the color ID
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorEditViewModel::class.java)
-        viewModel.setColorId(arguments.getLong(ColorEditActivity.EXTRA_COLOR_ID, 0))
+        viewModel.setColorId(colorId)
 
         //When the color changes for the first time, update the UI then change observer
         colorObserver = Observer { color ->

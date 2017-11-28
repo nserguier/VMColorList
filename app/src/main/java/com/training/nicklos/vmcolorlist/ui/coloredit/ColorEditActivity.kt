@@ -1,11 +1,10 @@
 package com.training.nicklos.vmcolorlist.ui.coloredit
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.training.nicklos.vmcolorlist.R
+import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.util.addFragmentToActivity
-
 import kotlinx.android.synthetic.main.activity_color_edit.*
 
 /**
@@ -13,10 +12,6 @@ import kotlinx.android.synthetic.main.activity_color_edit.*
  * to edit the selected color from the list
  */
 class ColorEditActivity : AppCompatActivity() {
-
-    companion object {
-        val EXTRA_COLOR_ID = "COLOR_ID"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

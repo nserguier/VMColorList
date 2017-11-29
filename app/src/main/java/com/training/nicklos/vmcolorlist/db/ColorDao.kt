@@ -3,10 +3,13 @@ package com.training.nicklos.vmcolorlist.db
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import android.support.annotation.WorkerThread
 import com.training.nicklos.vmcolorlist.model.Color
 
 /**
  * Data Access Object, handles the communication with the DB
+ *
+ * [WorkerThread]: All methods should be called from background threads
  */
 @Dao
 interface ColorDao {

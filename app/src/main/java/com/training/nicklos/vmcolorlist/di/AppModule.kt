@@ -22,7 +22,7 @@ class AppModule(private val context: Context) {
     @Provides
     @Singleton
     fun providesAppDatabase(context: Context): ColorDatabase =
-            Room.databaseBuilder(context, ColorDatabase::class.java, "color-db").allowMainThreadQueries().build()
+            Room.databaseBuilder(context, ColorDatabase::class.java, "color-db").build()
 
     @Provides
     @Singleton

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +16,11 @@ import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
-import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
+import com.training.nicklos.vmcolorlist.util.Constants.CODE_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
-import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_TRANSITION_NAME
+import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
+import kotlinx.android.synthetic.main.color_list_row.view.*
 import kotlinx.android.synthetic.main.fragment_color_list.*
 import javax.inject.Inject
 
@@ -42,7 +44,7 @@ class ColorListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity.application as ColorListApplication).appComponent.inject(this)
 
-        val itemClick: ((Long, View) -> Unit) = { colorId, colorView -> showColorEditActivity(colorId, colorView) }
+        val itemClick: ((Long, View) -> Unit) = { colorId, rowView -> showColorEditActivity(colorId, rowView) }
         val deleteClick: ((Color) -> Unit) = { color -> viewModel.deleteColor(color) }
 
         mAdapter = ColorListRecyclerAdapter(emptyList(), itemClick, deleteClick)
@@ -80,10 +82,14 @@ class ColorListFragment : Fragment() {
         }
     }
 
-    private fun showColorEditActivity(colorId: Long, colorView: View) {
+    private fun showColorEditActivity(colorId: Long, rowView: View) {
         val intent = Intent(context, ColorEditActivity::class.java)
         intent.putExtra(EXTRA_COLOR_ID, colorId)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, colorView, "$COLOR_TRANSITION_NAME$colorId")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity,
+                Pair<View, String>(rowView.color_preview, "$COLOR_TRANSITION_NAME$colorId"),
+                Pair<View, String>(rowView.color_code, "$CODE_TRANSITION_NAME$colorId")
+        )
         startActivity(intent, options.toBundle())
     }
 }

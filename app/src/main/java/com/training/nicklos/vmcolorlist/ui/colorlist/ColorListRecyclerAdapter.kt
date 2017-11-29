@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.util.Constants.CODE_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
 import kotlinx.android.synthetic.main.color_list_row.view.*
 
@@ -32,11 +33,16 @@ class ColorListRecyclerAdapter(private var mColors: List<Color>,
 
     class ViewHolder(private val rowView: View) : RecyclerView.ViewHolder(rowView) {
         fun bind(color: Color, onClick: (Long, View) -> Unit, onDelete: (Color) -> Unit) = with(rowView) {
+            //Fill color data into views
             color_preview.setBackgroundColor(color.getColorValue())
             color_code.text = color.getHexCode()
 
+            //Set names for the shared elements transition
             ViewCompat.setTransitionName(color_preview, "$COLOR_TRANSITION_NAME${color.id}")
-            rowView.setOnClickListener { onClick(color.id, color_preview) }
+            ViewCompat.setTransitionName(color_code, "$CODE_TRANSITION_NAME${color.id}")
+
+            //Set row item click listeners
+            rowView.setOnClickListener { onClick(color.id, rowView) }
             delete_button.setOnClickListener { onDelete(color) }
         }
     }

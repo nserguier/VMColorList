@@ -12,6 +12,7 @@ import android.widget.SeekBar
 import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.util.Constants.CODE_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.viewmodel.ColorEditViewModel
@@ -52,9 +53,10 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //Set color preview transition name
+        //Set shared elements transition names
         val colorId = arguments.getLong(EXTRA_COLOR_ID, 0)
         color_preview.transitionName = "$COLOR_TRANSITION_NAME$colorId"
+        color_code.transitionName = "$CODE_TRANSITION_NAME$colorId"
 
         //Get the viewmodel and set the color ID
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorEditViewModel::class.java)
@@ -73,6 +75,7 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     private fun updateColor(color: Color) {
         color_preview.setBackgroundColor(color.getColorValue())
+        color_code.text = color.getHexCode()
     }
 
     private fun updateSeekers(color: Color) {

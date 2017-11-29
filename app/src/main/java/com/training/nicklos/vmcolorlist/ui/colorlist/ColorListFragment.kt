@@ -41,7 +41,11 @@ class ColorListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity.application as ColorListApplication).appComponent.inject(this)
-        mAdapter = ColorListRecyclerAdapter(emptyList()) { colorId, colorView -> showColorEditActivity(colorId, colorView) }
+
+        val itemClick: ((Long, View) -> Unit) = { colorId, colorView -> showColorEditActivity(colorId, colorView) }
+        val deleteClick: ((Color) -> Unit) = { color -> viewModel.deleteColor(color) }
+
+        mAdapter = ColorListRecyclerAdapter(emptyList(), itemClick, deleteClick)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -67,7 +71,6 @@ class ColorListFragment : Fragment() {
         val colorsObserver = Observer<List<Color>> { t -> updateColorList(t) }
         viewModel.colors?.observe(this, colorsObserver)
     }
-
 
     private fun updateColorList(colors: List<Color>?) {
         colors?.let {

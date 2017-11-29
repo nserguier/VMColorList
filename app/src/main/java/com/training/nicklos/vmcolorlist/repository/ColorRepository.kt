@@ -31,4 +31,8 @@ class ColorRepository(var colorDao: ColorDao) {
     fun updateColor(color: Color) {
         colorDao.updateColor(color)
     }
+
+    fun deleteColor(color: Color) {
+        colorDao.deleteColor(color)
+    }
 }

@@ -3,6 +3,7 @@ package com.training.nicklos.vmcolorlist.ui.colorlist
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -31,7 +32,7 @@ import javax.inject.Inject
 class ColorListFragment : Fragment() {
 
     private lateinit var viewModel: ColorListViewModel
-    private lateinit var mAdapter: ColorListRecyclerAdapter
+    private lateinit var mAdapter: ColorAdapter
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -47,7 +48,7 @@ class ColorListFragment : Fragment() {
         val itemClick: ((Long, View) -> Unit) = { colorId, rowView -> showColorEditActivity(colorId, rowView) }
         val deleteClick: ((Color) -> Unit) = { color -> viewModel.deleteColor(color) }
 
-        mAdapter = ColorListRecyclerAdapter(emptyList(), itemClick, deleteClick)
+        mAdapter = ColorAdapter(itemClick, deleteClick)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -70,16 +71,8 @@ class ColorListFragment : Fragment() {
         // Get the viewmodel and observe on changes
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorListViewModel::class.java)
 
-        val colorsObserver = Observer<List<Color>> { t -> updateColorList(t) }
-        viewModel.colors?.observe(this, colorsObserver)
-    }
-
-    private fun updateColorList(colors: List<Color>?) {
-        colors?.let {
-            mAdapter.replaceData(it)
-            //scroll to the bottom
-            //color_list_recycler.smoothScrollToPosition(mAdapter.itemCount - 1)
-        }
+        val colorsObserver = Observer<PagedList<Color>> { pagedList -> mAdapter.setList(pagedList) }
+        viewModel.colors.observe(this, colorsObserver)
     }
 
     private fun showColorEditActivity(colorId: Long, rowView: View) {

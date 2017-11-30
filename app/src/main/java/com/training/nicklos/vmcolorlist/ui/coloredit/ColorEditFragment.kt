@@ -1,44 +1,29 @@
 package com.training.nicklos.vmcolorlist.ui.coloredit
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
-import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.ui.BaseFragment
 import com.training.nicklos.vmcolorlist.util.Constants.CODE_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.viewmodel.ColorEditViewModel
 import kotlinx.android.synthetic.main.fragment_color_edit.*
-import javax.inject.Inject
 
 /**
  * Fragment to allow the user to edit the selected color
  * by changing each RGB component.
  */
-class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
-
-    private lateinit var viewModel: ColorEditViewModel
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarChangeListener {
 
     private lateinit var colorObserver: Observer<Color>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity.application as ColorListApplication).appComponent.inject(this)
-    }
+    override fun getViewModel() = ColorEditViewModel::class.java
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_color_edit, container, false)
-    }
+    override fun getLayoutRes() = R.layout.fragment_color_edit
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,8 +43,7 @@ class ColorEditFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         color_preview.transitionName = "$COLOR_TRANSITION_NAME$colorId"
         color_code.transitionName = "$CODE_TRANSITION_NAME$colorId"
 
-        //Get the viewmodel and set the color ID
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorEditViewModel::class.java)
+        //Set the viewmodel color ID
         viewModel.setColorId(colorId)
 
         //When the color changes for the first time, update the UI then change observer

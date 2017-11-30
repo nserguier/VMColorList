@@ -38,12 +38,9 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
 
     //dagger
-    implementation "com.google.dagger:dagger:$rootProject.versions.dagger"
-    implementation "com.google.dagger:dagger-android:$rootProject.versions.dagger"
     implementation "com.google.dagger:dagger-android-support:$rootProject.versions.dagger"
-    kapt "com.google.dagger:dagger-android-processor:$rootProject.versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$rootProject.versions.dagger"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.versions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.versions.dagger"
 
     //room - viewmodel
     implementation "android.arch.lifecycle:extensions:1.0.0"

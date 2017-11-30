@@ -1,21 +1,16 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
 import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.training.nicklos.vmcolorlist.ColorListApplication
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.ui.BaseFragment
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
 import com.training.nicklos.vmcolorlist.util.Constants.CODE_TRANSITION_NAME
 import com.training.nicklos.vmcolorlist.util.Constants.COLOR_TRANSITION_NAME
@@ -23,27 +18,21 @@ import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
 import kotlinx.android.synthetic.main.color_list_row.view.*
 import kotlinx.android.synthetic.main.fragment_color_list.*
-import javax.inject.Inject
 
 /**
  * Fragment to show the list of colors.
  * This is a UI controller - only displays data provided in the VM
  */
-class ColorListFragment : Fragment() {
+class ColorListFragment : BaseFragment<ColorListViewModel>() {
 
-    private lateinit var viewModel: ColorListViewModel
     private lateinit var mAdapter: ColorAdapter
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    override fun getViewModel() = ColorListViewModel::class.java
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_color_list, container, false)
-    }
+    override fun getLayoutRes() = R.layout.fragment_color_list
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity.application as ColorListApplication).appComponent.inject(this)
 
         val itemClick: ((Long, View) -> Unit) = { colorId, rowView -> showColorEditActivity(colorId, rowView) }
         val deleteClick: ((Color) -> Unit) = { color -> viewModel.deleteColor(color) }
@@ -68,9 +57,7 @@ class ColorListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // Get the viewmodel and observe on changes
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ColorListViewModel::class.java)
-
+        //Observe changes on the color list to update the UI
         val colorsObserver = Observer<PagedList<Color>> { pagedList -> mAdapter.setList(pagedList) }
         viewModel.colors.observe(this, colorsObserver)
     }

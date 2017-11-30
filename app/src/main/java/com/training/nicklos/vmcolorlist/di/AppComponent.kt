@@ -1,14 +1,26 @@
 package com.training.nicklos.vmcolorlist.di
 
-import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditFragment
-import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListFragment
+import android.app.Application
+import com.training.nicklos.vmcolorlist.ColorListApplication
+import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class))
+@Component(modules = arrayOf(
+        AppModule::class,
+        AndroidInjectionModule::class,
+        ActivityBuilderModule::class))
 interface AppComponent {
 
-    fun inject(target: ColorListFragment)
-    fun inject(target: ColorEditFragment)
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
+
+        fun build(): AppComponent
+    }
+
+    fun inject(app: ColorListApplication)
 }

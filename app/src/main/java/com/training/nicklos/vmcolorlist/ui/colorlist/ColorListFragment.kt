@@ -23,22 +23,13 @@ import kotlinx.android.synthetic.main.fragment_color_list.*
  * Fragment to show the list of colors.
  * This is a UI controller - only displays data provided in the VM
  */
-class ColorListFragment : BaseFragment<ColorListViewModel>() {
+class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorListClickListener {
 
-    private lateinit var mAdapter: ColorAdapter
+    private val mAdapter: ColorAdapter by lazy { ColorAdapter(this) }
 
     override fun getViewModel() = ColorListViewModel::class.java
 
     override fun getLayoutRes() = R.layout.fragment_color_list
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val itemClick: ((Long, View) -> Unit) = { colorId, rowView -> showColorEditActivity(colorId, rowView) }
-        val deleteClick: ((Color) -> Unit) = { color -> viewModel.deleteColor(color) }
-
-        mAdapter = ColorAdapter(itemClick, deleteClick)
-    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,14 +53,19 @@ class ColorListFragment : BaseFragment<ColorListViewModel>() {
         viewModel.colors.observe(this, colorsObserver)
     }
 
-    private fun showColorEditActivity(colorId: Long, rowView: View) {
+    override fun onColorClicked(colorId: Long, clickedRow: View) {
+        //Go to the edit activity for that color
         val intent = Intent(context, ColorEditActivity::class.java)
         intent.putExtra(EXTRA_COLOR_ID, colorId)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 activity,
-                Pair<View, String>(rowView.color_preview, "$COLOR_TRANSITION_NAME$colorId"),
-                Pair<View, String>(rowView.color_code, "$CODE_TRANSITION_NAME$colorId")
+                Pair<View, String>(clickedRow.color_preview, "$COLOR_TRANSITION_NAME$colorId"),
+                Pair<View, String>(clickedRow.color_code, "$CODE_TRANSITION_NAME$colorId")
         )
         startActivity(intent, options.toBundle())
+    }
+
+    override fun onColorDeleteClicked(color: Color) {
+        viewModel.deleteColor(color)
     }
 }

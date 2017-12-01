@@ -4,9 +4,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
 import android.support.annotation.MainThread
+import com.training.nicklos.vmcolorlist.AppExecutors
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.repository.ColorRepository
-import com.training.nicklos.vmcolorlist.util.async
 import javax.inject.Inject
 
 /**
@@ -14,7 +14,8 @@ import javax.inject.Inject
  * Holds the data and logic to feed to the fragment.
  */
 @MainThread
-class ColorListViewModel @Inject constructor(private val colorRepo: ColorRepository) : ViewModel() {
+class ColorListViewModel @Inject constructor(private val colorRepo: ColorRepository,
+                                             private val executors: AppExecutors) : ViewModel() {
 
     val colors: LiveData<PagedList<Color>> by lazy {
         colorRepo.getColors().create(
@@ -27,10 +28,10 @@ class ColorListViewModel @Inject constructor(private val colorRepo: ColorReposit
     }
 
     fun addColor() {
-        async { colorRepo.addRandomColor() }
+        executors.diskIO.execute { colorRepo.addRandomColor() }
     }
 
     fun deleteColor(color: Color) {
-        async { colorRepo.deleteColor(color) }
+        executors.diskIO.execute { colorRepo.deleteColor(color) }
     }
 }

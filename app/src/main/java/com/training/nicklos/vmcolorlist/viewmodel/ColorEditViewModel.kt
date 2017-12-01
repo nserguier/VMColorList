@@ -3,11 +3,10 @@ package com.training.nicklos.vmcolorlist.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.os.AsyncTask
 import android.support.annotation.MainThread
+import com.training.nicklos.vmcolorlist.AppExecutors
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.repository.ColorRepository
-import com.training.nicklos.vmcolorlist.util.async
 import javax.inject.Inject
 
 /**
@@ -17,7 +16,8 @@ import javax.inject.Inject
  * [MainThread]: All methods here will be called from main thread, create async as needed
  */
 @MainThread
-class ColorEditViewModel @Inject constructor(private val colorRepo: ColorRepository) : ViewModel() {
+class ColorEditViewModel @Inject constructor(private val colorRepo: ColorRepository,
+                                             private val executors: AppExecutors) : ViewModel() {
 
     private var colorId: Long = -1
     private val color: MutableLiveData<Color> by lazy {
@@ -34,7 +34,7 @@ class ColorEditViewModel @Inject constructor(private val colorRepo: ColorReposit
 
     /** Attempt to load the color from the [colorId] in a different thread */
     private fun loadColor() {
-        async {
+        executors.diskIO.execute {
             colorId.let {
                 //Use postValue since we are on a background thread
                 color.postValue(colorRepo.getColorById(it))
@@ -49,6 +49,6 @@ class ColorEditViewModel @Inject constructor(private val colorRepo: ColorReposit
 
     /** Save the color to the DB, asynchronously */
     fun saveColor() {
-        async { color.value?.let { colorRepo.updateColor(it) } }
+        executors.diskIO.execute { color.value?.let { colorRepo.updateColor(it) } }
     }
 }

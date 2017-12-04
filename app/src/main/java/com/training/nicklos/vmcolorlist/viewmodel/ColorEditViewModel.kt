@@ -19,36 +19,37 @@ import javax.inject.Inject
 class ColorEditViewModel @Inject constructor(private val colorRepo: ColorRepository,
                                              private val executors: AppExecutors) : ViewModel() {
 
-    private var colorId: Long = -1
-    private val color: MutableLiveData<Color> by lazy {
-        MutableLiveData<Color>().also { loadColor() }
-    }
+    var colorId: Long = -1
+    private var color: MutableLiveData<Color>? = null
 
     /** Not MutableLiveData to prevent fragment from changing data */
-    fun getColor(): LiveData<Color> = color
+    fun getColor(): LiveData<Color> {
+        if (color == null) {
+            color = MutableLiveData()
+            loadColor()
+        }
+        return color!!
+    }
 
-    /** Use this from the fragment to set the ID */
-    fun setColorId(id: Long) {
-        colorId = id
+    fun resetColor() {
+        color = null
     }
 
     /** Attempt to load the color from the [colorId] in a different thread */
     private fun loadColor() {
         executors.diskIO.execute {
-            colorId.let {
-                //Use postValue since we are on a background thread
-                color.postValue(colorRepo.getColorById(it))
-            }
+            //Use postValue since we are on a background thread
+            color?.postValue(colorRepo.getColorById(colorId))
         }
     }
 
     /** When the color components have been changed by the user, update color */
     fun onColorChanged(newRed: Int, newGreen: Int, newBlue: Int) {
-        color.value = color.value?.update(newRed, newGreen, newBlue)
+        color?.value = color?.value?.update(newRed, newGreen, newBlue)
     }
 
     /** Save the color to the DB, asynchronously */
     fun saveColor() {
-        executors.diskIO.execute { color.value?.let { colorRepo.updateColor(it) } }
+        executors.diskIO.execute { color?.value?.let { colorRepo.updateColor(it) } }
     }
 }

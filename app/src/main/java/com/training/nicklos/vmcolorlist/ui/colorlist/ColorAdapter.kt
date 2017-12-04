@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.color_list_row.view.*
  * Adapter for the color list recycler view.
  * Populate recycler with rows showing a color preview and its hex code.
  */
-class ColorAdapter(private val colorListListener: ColorListClickListener)
+class ColorAdapter(private val colorItemListener: ColorItemClickListener)
     : PagedListAdapter<Color, ColorAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.color_list_row))
@@ -25,7 +25,7 @@ class ColorAdapter(private val colorListListener: ColorListClickListener)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val color = getItem(position)
         if (color != null) {
-            holder.bind(color, colorListListener)
+            holder.bind(color, colorItemListener)
         } else {
             //Null defines a placeholder item - PageListAdapter will automatically invalidate
             //this row when the actual object is loaded from the database
@@ -34,7 +34,7 @@ class ColorAdapter(private val colorListListener: ColorListClickListener)
     }
 
     class ViewHolder(private val rowView: View) : RecyclerView.ViewHolder(rowView) {
-        fun bind(color: Color, colorListListener: ColorListClickListener) = with(rowView) {
+        fun bind(color: Color, colorListListener: ColorItemClickListener) = with(rowView) {
             //Fill color data into views
             color_preview.setBackgroundColor(color.getColorValue())
             color_code.text = color.getHexCode()
@@ -44,7 +44,7 @@ class ColorAdapter(private val colorListListener: ColorListClickListener)
             ViewCompat.setTransitionName(color_code, "$CODE_TRANSITION_NAME${color.id}")
 
             //Set row item click listeners
-            rowView.setOnClickListener { colorListListener.onColorClicked(color.id, rowView) }
+            rowView.setOnClickListener { colorListListener.onColorItemClicked(color.id, rowView) }
             delete_button.setOnClickListener { colorListListener.onColorDeleteClicked(color) }
         }
 

@@ -6,9 +6,9 @@ import com.training.nicklos.vmcolorlist.model.Color
 /**
  * Interface to abstract click events between the [ColorAdapter] and the [ColorListFragment]
  */
-interface ColorListClickListener {
+interface ColorItemClickListener {
 
-    fun onColorClicked(colorId: Long, clickedRow: View)
+    fun onColorItemClicked(colorId: Long, clickedRow: View)
 
     fun onColorDeleteClicked(color: Color)
 }

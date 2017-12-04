@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_color_edit.*
  */
 class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarChangeListener {
 
-    private lateinit var colorObserver: Observer<Color>
+    private var colorObserver: Observer<Color>? = null
 
     override fun getViewModel() = ColorEditViewModel::class.java
 
@@ -31,20 +31,31 @@ class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarC
         //Set listener for edit button
         edit_button.setOnClickListener {
             viewModel.saveColor()
-            activity.onBackPressed()
+            if (activity is ColorEditActivity) activity.onBackPressed()
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //Set shared elements transition names
-        val colorId = arguments.getLong(EXTRA_COLOR_ID, 0)
-        color_preview.transitionName = "$COLOR_TRANSITION_NAME$colorId"
-        color_code.transitionName = "$CODE_TRANSITION_NAME$colorId"
+        //Try to get the colorId from arguments (for handset devices)
+        arguments?.getLong(EXTRA_COLOR_ID, 0)?.let { colorId ->
+            //Set shared elements transition names
+            color_preview.transitionName = "$COLOR_TRANSITION_NAME$colorId"
+            color_code.transitionName = "$CODE_TRANSITION_NAME$colorId"
 
-        //Set the viewmodel color ID
-        viewModel.setColorId(colorId)
+            updateContent(colorId)
+        }
+    }
+
+    fun updateContent(colorId: Long, resetColor: Boolean = false) {
+        //Do some preliminary clean-up to avoid weird behaviors (on tablet devices)
+        colorObserver?.let { viewModel.getColor().removeObserver(it) }
+        setSeekerListeners(null)
+        if (resetColor) viewModel.resetColor()
+
+        //Set the color ID
+        viewModel.colorId = colorId
 
         //When the color changes for the first time, update the UI then change observer
         colorObserver = Observer { color ->
@@ -54,7 +65,7 @@ class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarC
                 reObserveColor()
             }
         }
-        viewModel.getColor().observe(this, colorObserver)
+        viewModel.getColor().observe(this, colorObserver!!)
     }
 
     private fun updateColor(color: Color) {
@@ -75,19 +86,19 @@ class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarC
      */
     private fun reObserveColor() {
         //Remove previous observer
-        viewModel.getColor().removeObserver(colorObserver)
+        colorObserver?.let { viewModel.getColor().removeObserver(it) }
 
-        setSeekerListeners()
+        setSeekerListeners(this)
         val newColorObserver = Observer<Color> { color ->
             color?.let { updateColor(it) }
         }
         viewModel.getColor().observe(this, newColorObserver)
     }
 
-    private fun setSeekerListeners() {
-        red_seekbar.setOnSeekBarChangeListener(this)
-        green_seekbar.setOnSeekBarChangeListener(this)
-        blue_seekbar.setOnSeekBarChangeListener(this)
+    private fun setSeekerListeners(listener: SeekBar.OnSeekBarChangeListener?) {
+        red_seekbar.setOnSeekBarChangeListener(listener)
+        green_seekbar.setOnSeekBarChangeListener(listener)
+        blue_seekbar.setOnSeekBarChangeListener(listener)
     }
 
     override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {

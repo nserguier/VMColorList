@@ -1,37 +1,44 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
-import android.arch.paging.PagedList
 import android.content.Intent
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
+import android.widget.FrameLayout
 import com.training.nicklos.vmcolorlist.R
-import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.ui.BaseActivity
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditFragment
 import com.training.nicklos.vmcolorlist.util.Constants
+import com.training.nicklos.vmcolorlist.util.addFragmentToActivity
 import kotlinx.android.synthetic.main.color_list_row.view.*
 
 /**
  * This activity will host the [ColorListFragment] to show the list of colors
+ * as well as the [ColorEditFragment] to edit the color (if the device is large enough)
  */
-class ColorListActivity : BaseActivity(), ColorListListener {
+class ColorListActivity : BaseActivity(), OnColorItemSelectedListener {
 
     override fun getLayoutRes() = R.layout.activity_color_list
 
-    override fun onListFirstUpdated(colorList: PagedList<Color>) {
-        //Update the color edit fragment if it is showing (for tablet devices)
-        (supportFragmentManager.findFragmentById(R.id.edit_frag) as? ColorEditFragment)
-                ?.updateContent(colorList[0]!!.id)
-    }
-
     override fun onColorItemSelected(colorId: Long, clickedRow: View) {
-        val editFrag = supportFragmentManager.findFragmentById(R.id.edit_frag) as? ColorEditFragment
-        if (editFrag == null) {
-            startEditActivity(colorId, clickedRow)
+        val editFrame = findViewById<FrameLayout>(R.id.edit_frag)
+        val dualPane = editFrame != null && editFrame.visibility == View.VISIBLE
+
+        if(dualPane) {
+            //We can show the edit fragment in the same activity, check for existing edit fragment
+            var editFrag = supportFragmentManager.findFragmentById(R.id.edit_frag) as? ColorEditFragment
+            if(editFrag == null) {
+                //Make new fragment with color ID
+                editFrag = ColorEditFragment.newInstance(colorId)
+                addFragmentToActivity(supportFragmentManager, editFrag, R.id.edit_frag)
+            } else {
+                //Update existing fragment with color ID
+                editFrag.updateContent(colorId, resetColor = true)
+            }
         } else {
-            editFrag.updateContent(colorId, resetColor = true)
+            //Otherwise we need to launch a new activity
+            startEditActivity(colorId, clickedRow)
         }
     }
 

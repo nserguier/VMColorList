@@ -18,9 +18,7 @@ import kotlinx.android.synthetic.main.fragment_color_list.*
  */
 class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickListener {
 
-    private lateinit var mListener: ColorListListener
-    private var firstUpdate = true
-
+    private lateinit var mListener: OnColorItemSelectedListener
     private val mAdapter: ColorAdapter by lazy { ColorAdapter(this) }
 
     override fun getViewModel() = ColorListViewModel::class.java
@@ -29,7 +27,7 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mListener = activity as ColorListListener
+        mListener = activity as OnColorItemSelectedListener
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -50,15 +48,7 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
         super.onActivityCreated(savedInstanceState)
 
         //Observe changes on the color list to update the UI
-        val colorsObserver = Observer<PagedList<Color>> { pagedList ->
-            mAdapter.setList(pagedList)
-
-            if (firstUpdate && pagedList?.isNotEmpty() == true) {
-                firstUpdate = false
-                //Notifies the activity that the list has been updated/set for the first time
-                mListener.onListFirstUpdated(pagedList)
-            }
-        }
+        val colorsObserver = Observer<PagedList<Color>> { pagedList -> mAdapter.setList(pagedList) }
         viewModel.colors.observe(this, colorsObserver)
     }
 

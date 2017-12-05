@@ -9,7 +9,6 @@
     <fragment
         android:id="@+id/list_frag"
         android:name="com.training.nicklos.vmcolorlist.ui.colorlist.ColorListFragment"
-        class="com.training.nicklos.vmcolorlist.ui.colorlist.ColorListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_color_list" />

@@ -25,6 +25,19 @@ class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarC
 
     override fun getLayoutRes() = R.layout.fragment_color_edit
 
+    companion object {
+        fun newInstance(colorId: Long): ColorEditFragment {
+            val frag = ColorEditFragment()
+
+            // Supply color id input as an argument.
+            val args = Bundle()
+            args.putLong(EXTRA_COLOR_ID, colorId)
+            frag.arguments = args
+
+            return frag
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -9,18 +9,16 @@
     <fragment
         android:id="@+id/list_frag"
         android:name="com.training.nicklos.vmcolorlist.ui.colorlist.ColorListFragment"
-        class="com.training.nicklos.vmcolorlist.ui.colorlist.ColorListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         tools:layout="@layout/fragment_color_list" />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/edit_frag"
-        android:name="com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditFragment"
-        class="com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        tools:layout="@layout/fragment_color_edit" />
+        android:background="?android:detailsElementBackground"/>
+
 </LinearLayout>

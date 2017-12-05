@@ -1,6 +1,7 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
 import android.arch.paging.PagedListAdapter
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.recyclerview.extensions.DiffCallback
 import android.support.v7.widget.RecyclerView
@@ -20,16 +21,29 @@ import kotlinx.android.synthetic.main.color_list_row.view.*
 class ColorAdapter(private val colorItemListener: ColorItemClickListener)
     : PagedListAdapter<Color, ColorAdapter.ViewHolder>(DIFF_CALLBACK) {
 
+    private var selectedRow: View? = null
+    private var selectedId = -1L
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.color_list_row))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val color = getItem(position)
         if (color != null) {
             holder.bind(color, colorItemListener)
+            holder.setSelectedHighlight(color.id ==selectedId)
         } else {
             //Null defines a placeholder item - PageListAdapter will automatically invalidate
             //this row when the actual object is loaded from the database
             holder.clear()
+        }
+    }
+
+    fun onColorSelected(colorId: Long, clickedRow: View) {
+        if (colorId != selectedId) {
+            selectedRow?.setSelectedHighlight(false)
+            selectedId = colorId
+            clickedRow.setSelectedHighlight(true)
+            selectedRow = clickedRow
         }
     }
 
@@ -53,6 +67,8 @@ class ColorAdapter(private val colorItemListener: ColorItemClickListener)
             color_preview.setBackgroundColor(0)
             color_code.text = ""
         }
+
+        fun setSelectedHighlight(selected: Boolean) { rowView.setSelectedHighlight(selected) }
     }
 }
 
@@ -75,3 +91,12 @@ val DIFF_CALLBACK = object : DiffCallback<Color>() {
 
 fun ViewGroup.inflate(layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, false)
+
+/** Helper function to highlight the selected row */
+fun View.setSelectedHighlight(selected: Boolean) {
+    if (selected) {
+        setBackgroundColor(ContextCompat.getColor(context, R.color.gray))
+    } else {
+        setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+    }
+}

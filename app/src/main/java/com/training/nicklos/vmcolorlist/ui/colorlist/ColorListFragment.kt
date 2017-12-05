@@ -20,6 +20,7 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
 
     private lateinit var mListener: OnColorItemSelectedListener
     private val mAdapter: ColorAdapter by lazy { ColorAdapter(this) }
+    var itemSelection = false
 
     override fun getViewModel() = ColorListViewModel::class.java
 
@@ -53,6 +54,8 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
     }
 
     override fun onColorItemClicked(colorId: Long, clickedRow: View) {
+        //Call adapter selection if it's activated
+        if(itemSelection) mAdapter.onColorSelected(colorId, clickedRow)
         //Pass the click event to the activity to handle
         mListener.onColorItemSelected(colorId, clickedRow)
     }

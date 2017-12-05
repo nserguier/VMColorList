@@ -1,6 +1,7 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
@@ -11,6 +12,7 @@ import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditActivity
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditFragment
 import com.training.nicklos.vmcolorlist.util.Constants
 import com.training.nicklos.vmcolorlist.util.addFragmentToActivity
+import kotlinx.android.synthetic.main.activity_color_list.*
 import kotlinx.android.synthetic.main.color_list_row.view.*
 
 /**
@@ -19,12 +21,23 @@ import kotlinx.android.synthetic.main.color_list_row.view.*
  */
 class ColorListActivity : BaseActivity(), OnColorItemSelectedListener {
 
+    private var dualPane = false
+
     override fun getLayoutRes() = R.layout.activity_color_list
 
-    override fun onColorItemSelected(colorId: Long, clickedRow: View) {
-        val editFrame = findViewById<FrameLayout>(R.id.edit_frag)
-        val dualPane = editFrame != null && editFrame.visibility == View.VISIBLE
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        //Determine if we are in dual pane, where both fragments are visible
+        val editFrame = findViewById<FrameLayout>(R.id.edit_frag)
+        dualPane = editFrame != null && editFrame.visibility == View.VISIBLE
+        if(dualPane) {
+            //Enable item selection on the color list, clicked row will be highlighted
+            (list_frag as ColorListFragment).itemSelection = true
+        }
+    }
+
+    override fun onColorItemSelected(colorId: Long, clickedRow: View) {
         if(dualPane) {
             //We can show the edit fragment in the same activity, check for existing edit fragment
             var editFrag = supportFragmentManager.findFragmentById(R.id.edit_frag) as? ColorEditFragment

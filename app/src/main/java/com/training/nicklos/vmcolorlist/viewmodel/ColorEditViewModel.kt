@@ -39,6 +39,7 @@ class ColorEditViewModel @Inject constructor(private val colorRepo: ColorReposit
     private fun loadColor() {
         executors.diskIO.execute {
             //Use postValue since we are on a background thread
+            if(colorId < 0) throw IllegalArgumentException("Color ID cannot be negative")
             color?.postValue(colorRepo.getColorById(colorId))
         }
     }

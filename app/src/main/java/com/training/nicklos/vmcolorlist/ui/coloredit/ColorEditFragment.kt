@@ -41,8 +41,8 @@ class ColorEditFragment : BaseFragment<ColorEditViewModel>(), SeekBar.OnSeekBarC
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Set listener for edit button
-        edit_button.setOnClickListener {
+        //Set listener for save button
+        save_button.setOnClickListener {
             viewModel.saveColor()
             if (activity is ColorEditActivity) activity.onBackPressed()
         }

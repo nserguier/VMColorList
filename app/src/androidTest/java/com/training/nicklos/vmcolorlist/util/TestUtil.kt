@@ -6,14 +6,12 @@ import java.util.*
 /**
  * Helper methods for tests
  */
-class TestUtil {
-    companion object {
+object TestUtil {
 
-        private val COLOR_MAX = 255
+    private val COLOR_MAX = 255
 
-        fun createColor(colorId: Long) =
-                Color(Random().nextInt(COLOR_MAX),
-                        Random().nextInt(COLOR_MAX),
-                        Random().nextInt(COLOR_MAX)).apply { id = colorId }
-    }
+    fun createColor(colorId: Long) =
+            Color(Random().nextInt(COLOR_MAX),
+                    Random().nextInt(COLOR_MAX),
+                    Random().nextInt(COLOR_MAX)).apply { id = colorId }
 }

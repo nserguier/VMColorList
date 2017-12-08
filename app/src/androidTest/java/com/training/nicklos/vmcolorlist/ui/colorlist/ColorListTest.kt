@@ -9,8 +9,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Espresso UI tests
- * Needs to run on a device
+ * Espresso UI tests for the whole app.
+ * Needs to run on a device. Use the mock flavor to have in memory database.
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -30,6 +30,4 @@ class ColorListTest {
             isListCount(4)
         }
     }
-
-
 }

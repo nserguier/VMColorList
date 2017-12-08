@@ -4,8 +4,7 @@ import android.support.annotation.IntRange
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.pressBack
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.espresso.matcher.ViewMatchers.*
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot
 import com.training.nicklos.vmcolorlist.util.MatcherUtil.withBackgroundColor
@@ -17,10 +16,14 @@ import com.training.nicklos.vmcolorlist.util.ViewActionUtil
  * Provides high level methods to use in the actual tests.
  *
  * It contains the HOW: how to perform elementary operations on the [ColorEditFragment]
+ * as well as some useful checks on the UI.
  */
 class ColorEditRobot {
 
-    fun colorEdit(func: ColorEditRobot.() -> Unit) = ColorEditRobot().apply(func)
+    fun colorEdit(func: ColorEditRobot.() -> Unit): ColorEditRobot {
+        onView(withId(R.id.red_seekbar)).check(matches(isDisplayed()))
+        return ColorEditRobot().apply(func)
+    }
 
     fun red(@IntRange(from = 0, to = 100) value: Int) {
         onView(withId(R.id.red_seekbar))
@@ -37,14 +40,14 @@ class ColorEditRobot {
                 .perform(ViewActionUtil.setSeekbarProgress(value))
     }
 
-    fun save(func: ColorListRobot.() -> Unit): ColorListRobot {
+    infix fun save(func: ColorListRobot.() -> Unit): ColorListRobot {
         onView(withId(R.id.save_button))
                 .perform()
         //Redirect to the ColorList screen, so send back the ColorListRobot
         return ColorListRobot().apply(func)
     }
 
-    fun goBack(func: ColorListRobot.() -> Unit): ColorListRobot {
+    infix fun goBack(func: ColorListRobot.() -> Unit): ColorListRobot {
         //Safe to press back since this is not the root activity (for handset devices at least)
         //Need to change that for tablet testing
         pressBack()

@@ -6,6 +6,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditRobot
+import com.training.nicklos.vmcolorlist.util.RecyclerViewItemCountAssertion
 import com.training.nicklos.vmcolorlist.util.ViewActionUtil
 
 /**
@@ -14,10 +15,16 @@ import com.training.nicklos.vmcolorlist.util.ViewActionUtil
  * Provides high level methods to use in the actual tests.
  *
  * It contains the HOW: how to perform elementary operations on the [ColorListFragment]
+ * as well as some useful checks on the UI.
  */
 class ColorListRobot {
 
-    fun colorList(func: ColorListRobot.() -> Unit) = ColorListRobot().apply(func)
+    companion object {
+        /**
+         * Helper method to execute code on robot by bloc and replace the Builder pattern
+         */
+        fun colorList(func: ColorListRobot.() -> Unit) = ColorListRobot().apply(func)
+    }
 
     fun addRandomColor() {
         onView(withId(R.id.add_color_fab)).perform(click())
@@ -37,6 +44,8 @@ class ColorListRobot {
     }
 
     fun isListCount(count: Int) {
-        //TODO("Check if the list count matches expectation")
+        onView(withId(R.id.color_list_recycler))
+                .check(RecyclerViewItemCountAssertion(count))
     }
 }
+

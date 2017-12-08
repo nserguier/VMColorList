@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 
 /**
  * Instrumentation tests for the implementation of [ColorDao]
+ * Needs to run on a device
  */
 @RunWith(AndroidJUnit4::class)
 class ColorDaoTest {

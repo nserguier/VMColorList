@@ -1,7 +1,5 @@
 package com.training.nicklos.vmcolorlist.di
 
-import android.app.Application
-import android.arch.persistence.room.Room
 import com.training.nicklos.vmcolorlist.AppExecutors
 import com.training.nicklos.vmcolorlist.MainThreadExecutor
 import com.training.nicklos.vmcolorlist.db.ColorDao
@@ -17,13 +15,8 @@ import javax.inject.Singleton
 /**
  * Module to provide dependency on an application level
  */
-@Module(includes = arrayOf(ViewModelModule::class))
+@Module(includes = arrayOf(ViewModelModule::class, DatabaseModule::class))
 class AppModule {
-
-    @Provides
-    @Singleton
-    fun providesAppDatabase(app: Application): ColorDatabase =
-            Room.databaseBuilder(app, ColorDatabase::class.java, "color-db").build()
 
     @Provides
     @Singleton

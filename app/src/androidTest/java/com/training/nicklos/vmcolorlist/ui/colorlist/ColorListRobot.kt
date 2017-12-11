@@ -21,13 +21,17 @@ class ColorListRobot {
 
     companion object {
         /**
-         * Helper method to execute code on robot by bloc and replace the Builder pattern
+         * Helper method to execute a bloc of code on the screen the robot is associated to
          */
         fun colorList(func: ColorListRobot.() -> Unit) = ColorListRobot().apply(func)
     }
 
-    fun addRandomColor() {
-        onView(withId(R.id.add_color_fab)).perform(click())
+    fun addColors(count: Int) {
+        repeat(count) { onView(withId(R.id.add_color_fab)).perform(click()) }
+    }
+
+    fun addColor() {
+        addColors(1)
     }
 
     fun clickColor(position: Int, func: ColorEditRobot.() -> Unit): ColorEditRobot {

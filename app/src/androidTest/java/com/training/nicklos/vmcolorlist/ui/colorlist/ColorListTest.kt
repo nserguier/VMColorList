@@ -21,13 +21,24 @@ class ColorListTest {
     val activityRule = ActivityTestRule<ColorListActivity>(ColorListActivity::class.java)
 
     @Test
-    fun addColor() {
+    fun testAddColors() {
         colorList {
-            addRandomColor()
-            addRandomColor()
-            addRandomColor()
-            addRandomColor()
+            addColors(4)
             isListCount(4)
         }
     }
+
+    @Test
+    fun testDeleteColors() {
+        colorList {
+            addColors(3)
+            deleteColor(0)
+            isListCount(2)
+            deleteColor(1)
+            isListCount(1)
+            //TODO: need to wait on item to be deleted
+            //Cant use idle resources because livedata has the callback?
+        }
+    }
+
 }

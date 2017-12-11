@@ -8,8 +8,6 @@ import com.training.nicklos.vmcolorlist.model.Color
 
 /**
  * Data Access Object, handles the communication with the DB
- *
- * [WorkerThread]: All methods should be called from background threads
  */
 @Dao
 interface ColorDao {

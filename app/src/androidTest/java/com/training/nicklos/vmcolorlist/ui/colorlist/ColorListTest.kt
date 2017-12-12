@@ -1,5 +1,6 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
+import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.espresso.IdlingRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
@@ -11,6 +12,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import android.support.test.uiautomator.UiDevice
+
+
 
 /**
  * Espresso UI tests for the whole app.
@@ -78,4 +82,21 @@ class ColorListTest {
         }
     }
 
+    @Test
+    fun testConsistentOnRotation() {
+        val device = UiDevice.getInstance(getInstrumentation())
+
+        colorList {
+            addColors(2)
+            //Turn the device in landscape, increment will be consumed by the list update
+            MyCountingIdlingResource.instance.increment()
+            device.setOrientationRight()
+            isListCount(2)
+
+            addColors(2)
+            MyCountingIdlingResource.instance.increment()
+            device.setOrientationNatural()
+            isListCount(4)
+        }
+    }
 }

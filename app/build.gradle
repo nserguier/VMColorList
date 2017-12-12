@@ -83,6 +83,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
     //Espresso Idling Resources
     implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
+
+    //UIAutomator (help screen rotation)
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
     //Android Test Orchestrator
     androidTestUtil 'com.android.support.test:orchestrator:1.0.1'
 }

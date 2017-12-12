@@ -3,6 +3,7 @@ package com.training.nicklos.vmcolorlist.ui.coloredit
 import android.support.annotation.IntRange
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.pressBack
+import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import com.training.nicklos.vmcolorlist.R
@@ -42,7 +43,7 @@ class ColorEditRobot {
 
     infix fun save(func: ColorListRobot.() -> Unit): ColorListRobot {
         onView(withId(R.id.save_button))
-                .perform()
+                .perform(click())
         //Redirect to the ColorList screen, so send back the ColorListRobot
         return ColorListRobot().apply(func)
     }

@@ -6,6 +6,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.training.nicklos.vmcolorlist.di.MyCountingIdlingResource
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot.Companion.colorList
+import com.training.nicklos.vmcolorlist.util.TestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +19,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ColorListTest {
+
+    private val testColor = TestUtil.createColor(1)
 
     @Rule
     @JvmField
@@ -44,6 +47,34 @@ class ColorListTest {
             isListCount(2)
             deleteColor(1)
             isListCount(1)
+        }
+    }
+
+    @Test
+    fun testEditAndSaveColor() {
+        colorList {
+            addColor()
+        }.clickColorAt(0) {
+            red(testColor.red)
+            green(testColor.green)
+            blue(testColor.blue)
+        } save {
+            isHexCodeAt(0, testColor.getHexCode())
+            isColorAt(0, testColor.getColorValue())
+        }
+    }
+
+    @Test
+    fun testEditNoSaveColor() {
+        colorList {
+            addColor()
+        }.clickColorAt(0) {
+            red(testColor.red)
+            green(testColor.green)
+            blue(testColor.blue)
+        } goBack  {
+            not().isHexCodeAt(0, testColor.getHexCode())
+            not().isColorAt(0, testColor.getColorValue())
         }
     }
 

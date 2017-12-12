@@ -8,8 +8,6 @@ import org.hamcrest.Matcher
 import android.widget.SeekBar
 
 
-
-
 /**
  * Contains helper methods for custom ViewAction
  */
@@ -49,4 +47,5 @@ object ViewActionUtil {
         }
     }
 
+    fun withRecyclerView(recyclerViewId: Int) = RecyclerViewMatcher(recyclerViewId)
 }

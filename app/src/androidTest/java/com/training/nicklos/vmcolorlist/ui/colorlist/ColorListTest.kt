@@ -1,9 +1,12 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
+import android.support.test.espresso.IdlingRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.training.nicklos.vmcolorlist.di.MyCountingIdlingResource
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot.Companion.colorList
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +22,11 @@ class ColorListTest {
     @Rule
     @JvmField
     val activityRule = ActivityTestRule<ColorListActivity>(ColorListActivity::class.java)
+
+    @Before
+    fun setup() {
+        IdlingRegistry.getInstance().register(MyCountingIdlingResource.instance)
+    }
 
     @Test
     fun testAddColors() {
@@ -36,8 +44,6 @@ class ColorListTest {
             isListCount(2)
             deleteColor(1)
             isListCount(1)
-            //TODO: need to wait on item to be deleted
-            //Cant use idle resources because livedata has the callback?
         }
     }
 

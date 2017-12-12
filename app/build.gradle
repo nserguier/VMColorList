@@ -81,6 +81,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    //Espresso Idling Resources
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
     //Android Test Orchestrator
     androidTestUtil 'com.android.support.test:orchestrator:1.0.1'
 }

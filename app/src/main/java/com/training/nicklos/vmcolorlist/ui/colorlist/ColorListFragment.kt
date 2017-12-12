@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.training.nicklos.vmcolorlist.R
+import com.training.nicklos.vmcolorlist.di.ColorListObserver
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.ui.BaseFragment
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
@@ -48,7 +49,7 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
         super.onActivityCreated(savedInstanceState)
 
         //Observe changes on the color list to update the UI
-        val colorsObserver = Observer<PagedList<Color>> { pagedList -> mAdapter.setList(pagedList) }
+        val colorsObserver = ColorListObserver { pagedList -> mAdapter.setList(pagedList) }
         viewModel.colors.observe(this, colorsObserver)
     }
 

@@ -20,10 +20,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesColorDao(database: ColorDatabase) = database.colorDao()
-
-    @Provides
-    @Singleton
     fun providesColorRepository(colorDao: ColorDao) = ColorRepository(colorDao)
 
     @Provides

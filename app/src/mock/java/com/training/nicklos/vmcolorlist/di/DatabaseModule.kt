@@ -2,6 +2,7 @@ package com.training.nicklos.vmcolorlist.di
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import com.training.nicklos.vmcolorlist.db.ColorDao
 import com.training.nicklos.vmcolorlist.db.ColorDatabase
 import dagger.Module
 import dagger.Provides
@@ -18,5 +19,9 @@ class DatabaseModule {
     @Singleton
     fun providesAppDatabase(app: Application): ColorDatabase =
             Room.inMemoryDatabaseBuilder(app, ColorDatabase::class.java).build()
+
+    @Provides
+    @Singleton
+    fun providesColorDao(database: ColorDatabase): ColorDao = IdlingColorDao(database)
 
 }

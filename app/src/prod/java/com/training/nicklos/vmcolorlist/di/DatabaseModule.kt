@@ -18,4 +18,8 @@ class DatabaseModule {
     fun providesAppDatabase(app: Application): ColorDatabase =
             Room.databaseBuilder(app, ColorDatabase::class.java, "color-db").build()
 
+    @Provides
+    @Singleton
+    fun providesColorDao(database: ColorDatabase) = database.colorDao()
+
 }

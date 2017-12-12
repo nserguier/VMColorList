@@ -1,7 +1,5 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
-import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager

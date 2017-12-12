@@ -9,6 +9,8 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.view.View
 import com.training.nicklos.vmcolorlist.R
+import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.ui.ScreenRotatingRobot
 import com.training.nicklos.vmcolorlist.ui.coloredit.ColorEditRobot
 import com.training.nicklos.vmcolorlist.util.MatcherUtil
 import com.training.nicklos.vmcolorlist.util.RecyclerViewItemCountAssertion
@@ -24,11 +26,10 @@ import org.hamcrest.Matchers.not
  *
  * It contains the HOW: how to perform elementary operations on the [ColorListFragment]
  * as well as some useful checks on the UI.
+ *
+ * @param not When true, every checks on the UI should not match (be different from given value)
  */
-class ColorListRobot {
-
-    //When true, the next check on the UI should not match
-    private var not = false
+class ColorListRobot(private val not: Boolean = false) : ScreenRotatingRobot(usesIdleRes = true) {
 
     companion object {
         /**
@@ -63,27 +64,35 @@ class ColorListRobot {
                 .check(RecyclerViewItemCountAssertion(count))
     }
 
-    fun isColorAt(position: Int, color: Int) {
+    private fun isColorPreviewAt(position: Int, color: Int) {
         onView(withRecyclerView(R.id.color_list_recycler)
                 .atPositionOnView(position, R.id.color_preview))
                 .check(mayMatch(MatcherUtil.withBackgroundColor(color)))
     }
 
-    fun isHexCodeAt(position: Int, hex: String) {
+    private fun isColorHexAt(position: Int, hex: String) {
         onView(withRecyclerView(R.id.color_list_recycler)
                 .atPositionOnView(position, R.id.color_code))
                 .check(mayMatch(withText(hex)))
     }
 
+    fun isColorAt(position: Int, color: Color) {
+        isColorPreviewAt(position, color.getColorValue())
+        isColorHexAt(position, color.getHexCode())
+    }
+
+    /** Use match or match not depending on the [not] value */
     private fun mayMatch(viewMatcher: Matcher<in View>): ViewAssertion {
         return if (not) {
-            not = false //Reset not to false for the next check
             matches(not(viewMatcher))
         } else {
             matches(viewMatcher)
         }
     }
 
-    fun not() = this.apply { not = true }
+    /**
+     * Return a new robot that will use mismatch UI checks
+     */
+    fun not() = ColorListRobot(not = true)
 }
 

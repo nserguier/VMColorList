@@ -1,6 +1,5 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
-import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.espresso.IdlingRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
@@ -12,8 +11,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import android.support.test.uiautomator.UiDevice
-
 
 
 /**
@@ -25,6 +22,7 @@ import android.support.test.uiautomator.UiDevice
 class ColorListTest {
 
     private val testColor = TestUtil.createColor(1)
+    private val testColor2 = TestUtil.createColor(2)
 
     @Rule
     @JvmField
@@ -55,16 +53,25 @@ class ColorListTest {
     }
 
     @Test
-    fun testEditAndSaveColor() {
+    fun testEditRGB() {
         colorList {
             addColor()
         }.clickColorAt(0) {
-            red(testColor.red)
-            green(testColor.green)
-            blue(testColor.blue)
+            rgb(testColor)
+            //The color should be updated with new RGB
+            isColorShown(testColor)
+        }
+    }
+
+    @Test
+    fun testSaveColor() {
+        colorList {
+            addColor()
+        }.clickColorAt(0) {
+            rgb(testColor)
         } save {
-            isHexCodeAt(0, testColor.getHexCode())
-            isColorAt(0, testColor.getColorValue())
+            //The changes should be saved on the color
+            isColorAt(0, testColor)
         }
     }
 
@@ -73,30 +80,39 @@ class ColorListTest {
         colorList {
             addColor()
         }.clickColorAt(0) {
-            red(testColor.red)
-            green(testColor.green)
-            blue(testColor.blue)
-        } goBack  {
-            not().isHexCodeAt(0, testColor.getHexCode())
-            not().isColorAt(0, testColor.getColorValue())
+            rgb(testColor)
+        } goBack {
+            //The changes should not be saved on the color
+            not().isColorAt(0, testColor)
         }
     }
 
     @Test
-    fun testConsistentOnRotation() {
-        val device = UiDevice.getInstance(getInstrumentation())
-
+    fun testConsistentOnListRotation() {
         colorList {
             addColors(2)
-            //Turn the device in landscape, increment will be consumed by the list update
-            MyCountingIdlingResource.instance.increment()
-            device.setOrientationRight()
+            setOrientationLandscape()
             isListCount(2)
 
             addColors(2)
-            MyCountingIdlingResource.instance.increment()
-            device.setOrientationNatural()
+            setOrientationPortrait()
             isListCount(4)
+        }
+    }
+
+    @Test
+    fun testConsistentOnEditRotation() {
+        colorList {
+            addColor()
+        }.clickColorAt(0) {
+            rgb(testColor)
+            setOrientationLandscape()
+            //The color should keep the edited value after rotation
+            isColorShown(testColor)
+
+            rgb(testColor2)
+            setOrientationPortrait()
+            isColorShown(testColor2)
         }
     }
 }

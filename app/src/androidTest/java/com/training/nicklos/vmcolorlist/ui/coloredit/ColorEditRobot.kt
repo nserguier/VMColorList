@@ -5,8 +5,11 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.pressBack
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.withText
 import com.training.nicklos.vmcolorlist.R
+import com.training.nicklos.vmcolorlist.model.Color
+import com.training.nicklos.vmcolorlist.ui.ScreenRotatingRobot
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot
 import com.training.nicklos.vmcolorlist.util.MatcherUtil.withBackgroundColor
 import com.training.nicklos.vmcolorlist.util.ViewActionUtil
@@ -19,26 +22,27 @@ import com.training.nicklos.vmcolorlist.util.ViewActionUtil
  * It contains the HOW: how to perform elementary operations on the [ColorEditFragment]
  * as well as some useful checks on the UI.
  */
-class ColorEditRobot {
+class ColorEditRobot : ScreenRotatingRobot(usesIdleRes = false) {
 
-    fun colorEdit(func: ColorEditRobot.() -> Unit): ColorEditRobot {
-        onView(withId(R.id.red_seekbar)).check(matches(isDisplayed()))
-        return ColorEditRobot().apply(func)
-    }
-
-    fun red(@IntRange(from = 0, to = 100) value: Int) {
+    private fun red(@IntRange(from = 0, to = 255) value: Int) {
         onView(withId(R.id.red_seekbar))
                 .perform(ViewActionUtil.setSeekbarProgress(value))
     }
 
-    fun green(@IntRange(from = 0, to = 100) value: Int) {
+    private fun green(@IntRange(from = 0, to = 255) value: Int) {
         onView(withId(R.id.green_seekbar))
                 .perform(ViewActionUtil.setSeekbarProgress(value))
     }
 
-    fun blue(@IntRange(from = 0, to = 100) value: Int) {
+    private fun blue(@IntRange(from = 0, to = 255) value: Int) {
         onView(withId(R.id.blue_seekbar))
                 .perform(ViewActionUtil.setSeekbarProgress(value))
+    }
+
+    fun rgb(color: Color) {
+        red(color.red)
+        green(color.green)
+        blue(color.blue)
     }
 
     infix fun save(func: ColorListRobot.() -> Unit): ColorListRobot {
@@ -56,11 +60,17 @@ class ColorEditRobot {
         return ColorListRobot().apply(func)
     }
 
-    fun isHexCode(hex: String) {
+    private fun isColorHex(hex: String) {
         onView(withId(R.id.color_code)).check(matches(withText(hex)))
     }
 
-    fun isColor(color: Int) {
+    private fun isColorPreview(color: Int) {
         onView(withId(R.id.color_preview)).check(matches(withBackgroundColor(color)))
+    }
+
+    /** Combine hex code and color preview checks in one method */
+    fun isColorShown(color: Color) {
+        isColorHex(color.getHexCode())
+        isColorPreview(color.getColorValue())
     }
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "177541723067",
+    "firebase_url": "https://vmcolorlist.firebaseio.com",
+    "project_id": "vmcolorlist",
+    "storage_bucket": "vmcolorlist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177541723067:android:2a0f578523ff911b",
+        "android_client_info": {
+          "package_name": "com.training.nicklos.vmcolorlist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177541723067-67mllr3m8hlvs62cq0235mk69gb2rkkg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZjc39aSpm25GaDtNe3HVtGkKGa_RjX3o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

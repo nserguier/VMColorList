@@ -16,6 +16,8 @@ import org.junit.runner.RunWith
 /**
  * Espresso UI tests for the whole app.
  * Needs to run on a device. Use the mock flavor to have in memory database.
+ *
+ * Switch to mock flavor to run this test
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest

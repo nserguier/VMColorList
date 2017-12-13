@@ -67,7 +67,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.0.0"
 
     //paging library
-    implementation "android.arch.paging:runtime:1.0.0-alpha3"
+    implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
 
     //unit tests and mockito
     testImplementation 'junit:junit:4.12'
@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
 
     //UIAutomator (help screen rotation)
-    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 
     //Android Test Orchestrator
     androidTestUtil 'com.android.support.test:orchestrator:1.0.1'

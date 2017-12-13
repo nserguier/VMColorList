@@ -2,6 +2,7 @@ package com.training.nicklos.vmcolorlist.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.support.annotation.MainThread
 import com.training.nicklos.vmcolorlist.AppExecutors
@@ -18,13 +19,7 @@ class ColorListViewModel @Inject constructor(private val colorRepo: ColorReposit
                                              private val executors: AppExecutors) : ViewModel() {
 
     val colors: LiveData<PagedList<Color>> by lazy {
-        colorRepo.getColors().create(
-                0,
-                PagedList.Config.Builder()
-                        .setPageSize(80)
-                        .setPrefetchDistance(80)
-                        .build()
-        )
+        LivePagedListBuilder(colorRepo.getColors(), 80).build()
     }
 
     fun addColor() {

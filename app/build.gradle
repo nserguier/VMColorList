@@ -14,7 +14,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        //testInstrumentationRunner "com.training.nicklos.vmcolorlist.ColorTestRunner"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,10 +40,6 @@ android {
         //Test Orchestrator allows for each test to run on its own Instrumentation
         execution 'ANDROID_TEST_ORCHESTRATOR'
     }
-}
-
-kapt {
-    generateStubs = true
 }
 
 dependencies {

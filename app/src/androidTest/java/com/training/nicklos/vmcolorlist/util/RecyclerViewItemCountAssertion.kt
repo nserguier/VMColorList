@@ -1,10 +1,10 @@
 package com.training.nicklos.vmcolorlist.util
 
-import android.support.v7.widget.RecyclerView
 import android.support.test.espresso.NoMatchingViewException
 import android.support.test.espresso.ViewAssertion
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import junit.framework.Assert
+import org.junit.Assert
 
 
 /**

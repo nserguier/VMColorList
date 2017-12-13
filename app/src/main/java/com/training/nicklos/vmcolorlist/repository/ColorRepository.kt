@@ -1,7 +1,7 @@
 package com.training.nicklos.vmcolorlist.repository
 
 import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
 import com.training.nicklos.vmcolorlist.db.ColorDao
@@ -26,7 +26,7 @@ class ColorRepository(private val colorDao: ColorDao) {
 
     /** Can be called from [MainThread] because returns [LiveData]  */
     @MainThread
-    fun getColors(): LivePagedListProvider<Int, Color> {
+    fun getColors(): DataSource.Factory<Int, Color> {
         return colorDao.getAllColors()
     }
 

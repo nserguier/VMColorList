@@ -1,6 +1,6 @@
 package com.training.nicklos.vmcolorlist.di
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import com.training.nicklos.vmcolorlist.db.ColorDao
 import com.training.nicklos.vmcolorlist.db.ColorDatabase
 import com.training.nicklos.vmcolorlist.model.Color
@@ -15,7 +15,7 @@ class IdlingColorDao(database: ColorDatabase) : ColorDao {
 
     private val realDao = database.colorDao()
 
-    override fun getAllColors(): LivePagedListProvider<Int, Color> {
+    override fun getAllColors(): DataSource.Factory<Int, Color> {
         MyCountingIdlingResource.instance.increment()
         return realDao.getAllColors()
     }

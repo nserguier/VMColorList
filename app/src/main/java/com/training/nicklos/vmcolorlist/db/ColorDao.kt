@@ -1,9 +1,8 @@
 package com.training.nicklos.vmcolorlist.db
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
-import android.support.annotation.WorkerThread
 import com.training.nicklos.vmcolorlist.model.Color
 
 /**
@@ -13,7 +12,7 @@ import com.training.nicklos.vmcolorlist.model.Color
 interface ColorDao {
 
     @Query("SELECT * FROM color")
-    fun getAllColors(): LivePagedListProvider<Int, Color>
+    fun getAllColors(): DataSource.Factory<Int, Color>
 
     @Query("SELECT * FROM color WHERE id = :id")
     fun findColorById(id: Long): Color

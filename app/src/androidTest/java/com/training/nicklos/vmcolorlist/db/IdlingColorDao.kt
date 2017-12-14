@@ -1,22 +1,22 @@
-package com.training.nicklos.vmcolorlist.di
+package com.training.nicklos.vmcolorlist.db
 
 import android.arch.paging.DataSource
-import com.training.nicklos.vmcolorlist.db.ColorDao
-import com.training.nicklos.vmcolorlist.db.ColorDatabase
+import android.support.test.espresso.idling.CountingIdlingResource
+import com.training.nicklos.vmcolorlist.MyCountingIdlingResource
 import com.training.nicklos.vmcolorlist.model.Color
 
 /**
- * Decorated version of [com.training.nicklos.vmcolorlist.db.ColorDao]
+ * Decorated version of [ColorDao]
  * to add Espresso Idle Resource handling. See [ColorListObserver] for the other part.
  *
  * This helps Espresso UI tests know when a DAO action is running, so the test should wait for it to finish.
  */
-class IdlingColorDao(database: ColorDatabase) : ColorDao {
+class IdlingColorDao(database: ColorDatabase, private val idlingRes: CountingIdlingResource) : ColorDao {
 
     private val realDao = database.colorDao()
 
     override fun getAllColors(): DataSource.Factory<Int, Color> {
-        MyCountingIdlingResource.instance.increment()
+        idlingRes.increment()
         return realDao.getAllColors()
     }
 
@@ -25,17 +25,17 @@ class IdlingColorDao(database: ColorDatabase) : ColorDao {
     }
 
     override fun insertColor(color: Color) {
-        MyCountingIdlingResource.instance.increment()
+        idlingRes.increment()
         realDao.insertColor(color)
     }
 
     override fun updateColor(color: Color) {
-        MyCountingIdlingResource.instance.increment()
+        idlingRes.increment()
         realDao.updateColor(color)
     }
 
     override fun deleteColor(color: Color) {
-        MyCountingIdlingResource.instance.increment()
+        idlingRes.increment()
         realDao.deleteColor(color)
     }
 }

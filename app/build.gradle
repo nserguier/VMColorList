@@ -14,25 +14,13 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.training.nicklos.vmcolorlist.EspressoTestRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    flavorDimensions "mode"
-
-    productFlavors {
-        mock {
-            dimension "mode"
-            applicationIdSuffix = ".mock"
-        }
-        prod {
-            dimension "mode"
         }
     }
 
@@ -55,6 +43,7 @@ dependencies {
     //dagger
     implementation dagger.androidSupport
     kapt dagger.compiler
+    kaptAndroidTest dagger.compiler
     kapt dagger.androidProcessor
 
     //room - viewmodel

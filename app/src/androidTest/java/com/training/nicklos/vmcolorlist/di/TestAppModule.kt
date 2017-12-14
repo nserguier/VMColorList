@@ -3,7 +3,6 @@ package com.training.nicklos.vmcolorlist.di
 import com.training.nicklos.vmcolorlist.AppExecutors
 import com.training.nicklos.vmcolorlist.MainThreadExecutor
 import com.training.nicklos.vmcolorlist.db.ColorDao
-import com.training.nicklos.vmcolorlist.db.ColorDatabase
 import com.training.nicklos.vmcolorlist.repository.ColorRepository
 import dagger.Module
 import dagger.Provides
@@ -13,10 +12,12 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 /**
- * Module to provide dependency on an application level
+ * Version of [AppModule] for instrumented tests.
  */
-@Module(includes = arrayOf(ViewModelModule::class, DatabaseModule::class, ColorListObserverModule::class))
-class AppModule {
+@Module(includes = arrayOf(ViewModelModule::class, TestDatabaseModule::class, TestColorListObserverModule::class))
+class TestAppModule {
+    //TODO instead of copying everything, try extends?
+    //Or put the common stuff in dedicated modules
 
     @Provides
     @Singleton

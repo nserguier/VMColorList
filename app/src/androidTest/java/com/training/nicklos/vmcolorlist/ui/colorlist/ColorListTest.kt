@@ -1,16 +1,17 @@
 package com.training.nicklos.vmcolorlist.ui.colorlist
 
 import android.support.test.espresso.IdlingRegistry
+import android.support.test.espresso.idling.CountingIdlingResource
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.training.nicklos.vmcolorlist.di.MyCountingIdlingResource
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot.Companion.colorList
 import com.training.nicklos.vmcolorlist.util.TestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 
 /**
@@ -23,6 +24,9 @@ import org.junit.runner.RunWith
 @LargeTest
 class ColorListTest {
 
+    @Inject
+    lateinit var idlingRes: CountingIdlingResource
+
     private val testColor = TestUtil.createColor(1)
     private val testColor2 = TestUtil.createColor(2)
 
@@ -32,7 +36,7 @@ class ColorListTest {
 
     @Before
     fun setup() {
-        IdlingRegistry.getInstance().register(MyCountingIdlingResource.instance)
+        IdlingRegistry.getInstance().register(idlingRes)
     }
 
     @Test

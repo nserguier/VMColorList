@@ -1,8 +1,9 @@
 package com.training.nicklos.vmcolorlist.ui
 
 import android.support.test.InstrumentationRegistry.getInstrumentation
+import android.support.test.espresso.idling.CountingIdlingResource
 import android.support.test.uiautomator.UiDevice
-import com.training.nicklos.vmcolorlist.di.MyCountingIdlingResource
+import javax.inject.Inject
 
 /**
  * Superclass for UI testing robots able to perform screen rotation (landscape/portrait)
@@ -11,17 +12,20 @@ import com.training.nicklos.vmcolorlist.di.MyCountingIdlingResource
  */
 abstract class ScreenRotatingRobot(private val usesIdleRes: Boolean) {
 
+    @Inject
+    lateinit var idlingRes: CountingIdlingResource
+
     private val device = UiDevice.getInstance(getInstrumentation())
 
     fun setOrientationLandscape() {
         //increment will be consumed by the list update (onResume)
-        if (usesIdleRes) MyCountingIdlingResource.instance.increment()
+        if (usesIdleRes) idlingRes.increment()
         device.setOrientationRight()
     }
 
     fun setOrientationPortrait() {
         //increment will be consumed by the list update (onResume)
-        if (usesIdleRes) MyCountingIdlingResource.instance.increment()
+        if (usesIdleRes) idlingRes.increment()
         device.setOrientationNatural()
     }
 }

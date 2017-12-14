@@ -11,7 +11,7 @@ import javax.inject.Inject
 /**
  * The application class is overridden for dependency injection purposes
  */
-class ColorListApplication : Application(), HasActivityInjector {
+open class ColorListApp : Application(), HasActivityInjector {
 
     @Inject
     lateinit var activityDispatchingInjector: DispatchingAndroidInjector<Activity>
@@ -21,7 +21,7 @@ class ColorListApplication : Application(), HasActivityInjector {
         initializeComponent()
     }
 
-    private fun initializeComponent() {
+    open internal fun initializeComponent() {
         DaggerAppComponent.builder()
                 .application(this)
                 .build()

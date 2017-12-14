@@ -1,4 +1,4 @@
-package com.training.nicklos.vmcolorlist.di
+package com.training.nicklos.vmcolorlist
 
 import android.support.test.espresso.idling.CountingIdlingResource
 

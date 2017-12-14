@@ -8,7 +8,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Provides the [ColorDatabase] using Room builder
+ * Module to provide a database and a dao to the app
  */
 @Module
 class DatabaseModule {

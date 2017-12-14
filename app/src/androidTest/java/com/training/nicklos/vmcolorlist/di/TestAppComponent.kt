@@ -1,26 +1,30 @@
 package com.training.nicklos.vmcolorlist.di
 
 import android.app.Application
-import com.training.nicklos.vmcolorlist.ColorListApp
+import com.training.nicklos.vmcolorlist.TestColorListApp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
+/**
+ * Version of [AppComponent] for instrumented tests.
+ * Uses module specifically for tests.
+ */
 @Singleton
 @Component(modules = arrayOf(
-        AppModule::class,
+        TestAppModule::class,
         AndroidInjectionModule::class,
         ActivityBuilderModule::class))
-interface AppComponent {
+interface TestAppComponent: AppComponent {
 
     @Component.Builder
     interface Builder {
         @BindsInstance
         fun application(application: Application): Builder
 
-        fun build(): AppComponent
+        fun build(): TestAppComponent
     }
 
-    fun inject(app: ColorListApp)
+    fun inject(testApp: TestColorListApp)
 }

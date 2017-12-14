@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.training.nicklos.vmcolorlist.R
-import com.training.nicklos.vmcolorlist.di.ColorListObserver
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.ui.BaseFragment
 import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
 import kotlinx.android.synthetic.main.fragment_color_list.*
+import javax.inject.Inject
 
 /**
  * Fragment to show the list of colors.
@@ -19,6 +19,9 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
 
     private lateinit var mListener: OnColorItemSelectedListener
     private val mAdapter: ColorAdapter by lazy { ColorAdapter(this) }
+
+    @Inject
+    lateinit var colorsObserver: ColorListObserver
 
     override fun getViewModel() = ColorListViewModel::class.java
 
@@ -47,7 +50,7 @@ class ColorListFragment : BaseFragment<ColorListViewModel>(), ColorItemClickList
         super.onActivityCreated(savedInstanceState)
 
         //Observe changes on the color list to update the UI
-        val colorsObserver = ColorListObserver { pagedList -> mAdapter.setList(pagedList) }
+        colorsObserver.setOnChanged { pagedList -> mAdapter.setList(pagedList) }
         viewModel.colors.observe(this, colorsObserver)
     }
 

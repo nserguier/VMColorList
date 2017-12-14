@@ -1,12 +1,10 @@
 package com.training.nicklos.vmcolorlist.ui.coloredit
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.training.nicklos.vmcolorlist.R
 import com.training.nicklos.vmcolorlist.ui.BaseActivity
 import com.training.nicklos.vmcolorlist.util.Constants.EXTRA_COLOR_ID
 import com.training.nicklos.vmcolorlist.util.addFragmentToActivity
-import kotlinx.android.synthetic.main.activity_color_edit.*
 
 /**
  * This activity will host the [ColorEditFragment]

@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.verify
 import com.training.nicklos.vmcolorlist.AppExecutors
 import com.training.nicklos.vmcolorlist.model.Color
 import com.training.nicklos.vmcolorlist.repository.ColorRepository
-import com.training.nicklos.vmcolorlist.viewmodel.ColorListViewModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

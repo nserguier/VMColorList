@@ -2,6 +2,8 @@ package com.training.nicklos.vmcolorlist.di
 
 import android.app.Application
 import com.training.nicklos.vmcolorlist.TestColorListApp
+import com.training.nicklos.vmcolorlist.ui.ScreenRotatingRobot
+import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListTest
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -27,4 +29,8 @@ interface TestAppComponent: AppComponent {
     }
 
     fun inject(testApp: TestColorListApp)
+
+    fun inject(colorListTest: ColorListTest)
+
+    fun inject(robot: ScreenRotatingRobot)
 }

@@ -1,6 +1,7 @@
 package com.training.nicklos.vmcolorlist
 
 import com.training.nicklos.vmcolorlist.di.DaggerTestAppComponent
+import com.training.nicklos.vmcolorlist.di.TestAppComponent
 
 /**
  * Version of [ColorListApp] for instrumented tests.
@@ -8,10 +9,14 @@ import com.training.nicklos.vmcolorlist.di.DaggerTestAppComponent
  */
 class TestColorListApp : ColorListApp() {
 
+    companion object {
+        @JvmStatic lateinit var component: TestAppComponent
+    }
+
     override fun initializeComponent() {
-        DaggerTestAppComponent.builder()
+        component = DaggerTestAppComponent.builder()
                 .application(this)
                 .build()
-                .inject(this)
+        component.inject(this)
     }
 }

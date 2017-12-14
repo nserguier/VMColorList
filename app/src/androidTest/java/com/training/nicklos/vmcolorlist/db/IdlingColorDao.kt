@@ -2,7 +2,6 @@ package com.training.nicklos.vmcolorlist.db
 
 import android.arch.paging.DataSource
 import android.support.test.espresso.idling.CountingIdlingResource
-import com.training.nicklos.vmcolorlist.MyCountingIdlingResource
 import com.training.nicklos.vmcolorlist.model.Color
 
 /**

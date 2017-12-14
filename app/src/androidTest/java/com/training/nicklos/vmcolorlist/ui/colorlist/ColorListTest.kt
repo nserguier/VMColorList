@@ -5,6 +5,7 @@ import android.support.test.espresso.idling.CountingIdlingResource
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.training.nicklos.vmcolorlist.TestColorListApp
 import com.training.nicklos.vmcolorlist.ui.colorlist.ColorListRobot.Companion.colorList
 import com.training.nicklos.vmcolorlist.util.TestUtil
 import org.junit.Before
@@ -36,6 +37,7 @@ class ColorListTest {
 
     @Before
     fun setup() {
+        TestColorListApp.component.inject(this)
         IdlingRegistry.getInstance().register(idlingRes)
     }
 
